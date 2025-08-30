@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Monitoraggio IoT - Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <style>
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin-bottom: 20px;
+        }
+        .stat-card {
+            border-left: 4px solid #007bff;
+            margin-bottom: 15px;
+        }
+        .anomaly-alert {
+            border-left: 4px solid #dc3545;
+        }
+        .navbar-brand {
+            font-weight: bold;
+        }
+        .sensor-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">🏥 Health Monitor IoT</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dashboard">Dashboard</a>
+                    </li>
+                    <li class="nav-item admin-only" style="display: none;">
+                        <a class="nav-link" href="/admin">Amministrazione</a>
+                    </li>
+                    <li class="nav-item">
+                        <span class="navbar-text text-white me-3">
+                            👤 <span id="current-user">User</span>
+                        </span>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Dashboard -->
+    <div class="container-fluid mt-4">
+        <!-- Anomaly Alerts -->
+        <div id="anomaly-section" class="row mb-4">
+            <div class="col-12">
+                <div class="alert alert-warning anomaly-alert" style="display: none;" id="anomaly-alert">
+                    <h5>⚠️ Anomalie Rilevate</h5>
+                    <div id="anomaly-list"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card stat-card">
+                    <div class="card-body">
+                        <h6 class="card-subtitle mb-2 text-muted">Frequenza Cardiaca Media</h6>
+                        <h3 class="card-title" id="stat-hr">--</h3>
+                        <small class="text-muted">bpm (ultima settimana)</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stat-card">
+                    <div class="card-body">
+                        <h6 class="card-subtitle mb-2 text-muted">Temperatura Media</h6>
+                        <h3 class="card-title" id="stat-temp">--</h3>
+                        <small class="text-muted">°C (ultima settimana)</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stat-card">
+                    <div class="card-body">
+                        <h6 class="card-subtitle mb-2 text-muted">Attività Elettrodermica</h6>
+                        <h3 class="card-title" id="stat-eda">--</h3>
+                        <small class="text-muted">μS (ultima settimana)</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stat-card">
+                    <div class="card-body">
+                        <h6 class="card-subtitle mb-2 text-muted">Dati Totali</h6>
+                        <h3 class="card-title" id="stat-total">--</h3>
+                        <small class="text-muted">rilevazioni</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- User Selection (Admin Only) -->
+        <div class="row mb-3 admin-only" style="display: none;">
+            <div class="col-md-6">
+                <label for="user-select" class="form-label">Seleziona Utente:</label>
+                <select class="form-select" id="user-select">
+                    <option value="all">Tutti gli utenti</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Charts Grid -->
+        <div class="sensor-grid">
+            <!-- Heart Rate Chart -->
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">❤️ Frequenza Cardiaca</h5>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container">
+                        <canvas id="hr-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Temperature Chart -->
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">🌡️ Temperatura Cutanea</h5>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container">
+                        <canvas id="temp-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EDA Chart -->
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">⚡ Attività Elettrodermica (EDA)</h5>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container">
+                        <canvas id="eda-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BVP Chart -->
+            <div class="card">
+                <div class="card-header bg-warning text-white">
+                    <h5 class="mb-0">💓 Volume Polso Sanguigno (BVP)</h5>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container">
+                        <canvas id="bvp-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Accelerometer Chart -->
+            <div class="card">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0">📊 Accelerometro</h5>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container">
+                        <canvas id="acc-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- IBI Chart -->
+            <div class="card">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="mb-0">⏱️ Inter-Beat Interval (IBI)</h5>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container">
+                        <canvas id="ibi-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Dashboard Script -->
+    <script>
+        // Dati dal server (passati dal template)
+        const chartData = {{ chart_data|safe }};
+        const stats = {{ stats|safe }};
+        const isAdmin = {{ is_admin|lower }};
+        const anomalies = {{ anomalies|safe }};
+        
+        // Configurazione grafici
+        const charts = {};
+        const chartConfigs = {
+            'hr': { label: 'BPM', color: 'rgb(255, 99, 132)', unit: 'bpm' },
+            'temp': { label: 'Temperatura (°C)', color: 'rgb(54, 162, 235)', unit: '°C' },
+            'eda': { label: 'EDA (μS)', color: 'rgb(75, 192, 192)', unit: 'μS' },
+            'bvp': { label: 'BVP', color: 'rgb(255, 206, 86)', unit: '' },
+            'acc': { label: 'Accelerazione', color: 'rgb(153, 102, 255)', unit: 'g' },
+            'ibi': { label: 'IBI (ms)', color: 'rgb(255, 159, 64)', unit: 'ms' }
+        };
+        
+        // Inizializza grafici
+        function initCharts() {
+            Object.keys(chartConfigs).forEach(sensorType => {
+                const ctx = document.getElementById(`${sensorType}-chart`);
+                if (ctx) {
+                    charts[sensorType] = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: [],
+                            datasets: []
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    display: true
+                                },
+                                tooltip: {
+                                    mode: 'index',
+                                    intersect: false
+                                }
+                            },
+                            scales: {
+                                x: {
+                                    display: true,
+                                    title: {
+                                        display: true,
+                                        text: 'Tempo'
+                                    }
+                                },
+                                y: {
+                                    display: true,
+                                    title: {
+                                        display: true,
+                                        text: chartConfigs[sensorType].label
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+            });
+        }
+        
+        // Aggiorna grafici con i dati
+        function updateCharts(userData) {
+            Object.keys(charts).forEach(sensorType => {
+                const chart = charts[sensorType];
+                const datasets = [];
+                
+                Object.keys(userData).forEach((username, idx) => {
+                    if (userData[username][sensorType]) {
+                        const data = userData[username][sensorType];
+                        datasets.push({
+                            label: username,
+                            data: data.values,
+                            borderColor: `hsl(${idx * 60}, 70%, 50%)`,
+                            backgroundColor: `hsla(${idx * 60}, 70%, 50%, 0.1)`,
+                            tension: 0.1
+                        });
+                        
+                        // Usa i timestamp del primo dataset
+                        if (datasets.length === 1) {
+                            chart.data.labels = data.timestamps.map(t => {
+                                const date = new Date(t);
+                                return date.toLocaleString('it-IT', {
+                                    day: '2-digit',
+                                    month: '2-digit',
+                                    hour: '2-digit',
+                                    minute: '2-digit'
+                                });
+                            });
+                        }
+                    }
+                });
+                
+                chart.data.datasets = datasets;
+                chart.update();
+            });
+        }
+        
+        // Aggiorna statistiche
+        function updateStats(statsData) {
+            let totalCount = 0;
+            let hrSum = 0, hrCount = 0;
+            let tempSum = 0, tempCount = 0;
+            let edaSum = 0, edaCount = 0;
+            
+            Object.values(statsData).forEach(userStats => {
+                if (userStats.hr) {
+                    hrSum += userStats.hr.mean;
+                    hrCount++;
+                    totalCount += userStats.hr.count;
+                }
+                if (userStats.temp) {
+                    tempSum += userStats.temp.mean;
+                    tempCount++;
+                    totalCount += userStats.temp.count;
+                }
+                if (userStats.eda) {
+                    edaSum += userStats.eda.mean;
+                    edaCount++;
+                    totalCount += userStats.eda.count;
+                }
+            });
+            
+            document.getElementById('stat-hr').textContent = hrCount > 0 ? 
+                (hrSum / hrCount).toFixed(1) : '--';
+            document.getElementById('stat-temp').textContent = tempCount > 0 ? 
+                (tempSum / tempCount).toFixed(1) : '--';
+            document.getElementById('stat-eda').textContent = edaCount > 0 ? 
+                (edaSum / edaCount).toFixed(2) : '--';
+            document.getElementById('stat-total').textContent = totalCount;
+        }
+        
+        // Mostra anomalie
+        function showAnomalies(anomaliesList) {
+            if (anomaliesList && anomaliesList.length > 0) {
+                const anomalyAlert = document.getElementById('anomaly-alert');
+                const anomalyList = document.getElementById('anomaly-list');
+                
+                anomalyList.innerHTML = anomaliesList.map(a => `
+                    <div class="mb-2">
+                        <strong>${a.username}</strong> - ${a.sensor_type}: 
+                        Valore ${a.value.toFixed(2)} supera soglia ${a.threshold.toFixed(2)}
+                        <small class="text-muted">(${new Date(a.timestamp).toLocaleString('it-IT')})</small>
+                    </div>
+                `).join('');
+                
+                anomalyAlert.style.display = 'block';
+            }
+        }
+        
+        // Setup interfaccia admin
+        function setupAdminInterface() {
+            if (isAdmin) {
+                document.querySelectorAll('.admin-only').forEach(el => {
+                    el.style.display = 'block';
+                });
+                
+                // Popola select utenti
+                const userSelect = document.getElementById('user-select');
+                Object.keys(chartData).forEach(username => {
+                    const option = document.createElement('option');
+                    option.value = username;
+                    option.textContent = username;
+                    userSelect.appendChild(option);
+                });
+                
+                // Gestisci cambio utente
+                userSelect.addEventListener('change', (e) => {
+                    if (e.target.value === 'all') {
+                        updateCharts(chartData);
+                        updateStats(stats);
+                    } else {
+                        const filtered = { [e.target.value]: chartData[e.target.value] };
+                        const filteredStats = { [e.target.value]: stats[e.target.value] };
+                        updateCharts(filtered);
+                        updateStats(filteredStats);
+                    }
+                });
+            }
+        }
+        
+        // Auto-refresh ogni 30 secondi
+        function autoRefresh() {
+            setInterval(() => {
+                location.reload();
+            }, 30000);
+        }
+        
+        // Inizializza tutto al caricamento
+        document.addEventListener('DOMContentLoaded', () => {
+            initCharts();
+            updateCharts(chartData);
+            updateStats(stats);
+            showAnomalies(anomalies);
+            setupAdminInterface();
+            autoRefresh();
+        });
+    </script>
+</body>
+</html>
