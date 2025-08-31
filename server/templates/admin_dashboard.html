@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<h2>Benvenuto, Admin {{ current_user.username }}</h2>
+
+<h3>Gestione Utenti</h3>
+<a href="{{ url_for('create_user') }}">Crea Nuovo Utente</a>
+<table border="1" cellpadding="5">
+  <tr>
+    <th>Username</th>
+    <th>Email</th>
+    <th>Azioni</th>
+  </tr>
+  {% for user in users %}
+  <tr>
+    <td>{{ user.username }}</td>
+    <td>{{ user.email }}</td>
+    <td>
+      {% if user.username != 'admin' %}
+      <a href="{{ url_for('delete_user', user_id=user.id) }}" onclick="return confirm('Eliminare utente?')">Elimina</a>
+      {% else %}
+      ---
+      {% endif %}
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+
+<hr>
+
+<h3>Grafici Sensori Utenti</h3>
+
+{% for username, sensors in chart_data.items() %}
+<h2>Utente: {{ username }}</h2>
+  {% for sensor, data in sensors.items() %}
+    <h3>{{ sensor }}</h3>
+    <canvas id="{{ username }}_{{ sensor }}"></canvas>
+    <script>
+      const ctx = document.getElementById("{{ username }}_{{ sensor }}").getContext("2d");
+      const sensorData = {{ chart_data|safe }}['{{ username }}']['{{ sensor }}'];
+      new Chart(ctx, {
+        type:'line',
+        data:{
+          labels:sensorData.timestamps,
+          datasets:[
+            {label:'Valori', data:sensorData.values, borderColor:'blue', fill:false},
+            {label:'Media mobile', data:sensorData.moving_average, borderColor:'green', fill:false},
+            {label:'Anomalie', data:sensorData.anomalies, borderColor:'red', fill:false, pointRadius:5}
+          ]
+        }
+      });
+    </script>
+  {% endfor %}
+<hr>
+{% endfor %}
+
+</body>
+</html>

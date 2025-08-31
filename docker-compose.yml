@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  # Database PostgreSQL
+  postgres:
+    image: postgres:15-alpine
+    container_name: health_monitor_db
+    environment:
+      POSTGRES_DB: health_monitoring
+      POSTGRES_USER: health_user
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-secure_password_here}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - health_network
+    restart: unless-stopped
+
+  # Server Flask
+  web:
+    build: .
+    container_name: health_monitor_server
+    environment:
+      DATABASE_URL: postgresql://health_user:${DB_PASSWORD:-secure_password_here}@postgres:5432/health_monitoring
+      SECRET_KEY: ${SECRET_KEY:-your-secret-key-here}
+      EMAIL_SENDER: ${EMAIL_SENDER}
+      EMAIL_PASSWORD: ${EMAIL_PASSWORD}
+      FLASK_ENV: production
+    ports:
+      - "5000:5000"
+    depends_on:
+      - postgres
+    volumes:
+      - ./server:/app
+      - ./data:/data
+    networks:
+      - health_network
+    restart: unless-stopped
+    command: gunicorn -w 4 -b 0.0.0.0:5000 app:app
+
+  # Client sensore (esempio)
+  sensor_client_1:
+    build: 
+      context: .
+      dockerfile: Dockerfile.client
+    container_name: sensor_client_1
+    environment:
+      SERVER_URL: http://web:5000
+      CLIENT_ID: user1_device1
+      DATA_FOLDER: /data/fatigueset
+      SPEED_MULTIPLIER: 10
+    volumes:
+      - ./data:/data
+    depends_on:
+      - web
+    networks:
+      - health_network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+
+networks:
+  health_network:
+    driver: bridge

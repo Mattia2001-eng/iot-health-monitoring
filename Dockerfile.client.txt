@@ -1,0 +1,17 @@
+FROM python:3.10-slim
+
+WORKDIR /app
+
+# Installa dipendenze minime
+COPY requirements.txt .
+RUN pip install --no-cache-dir pandas requests numpy
+
+# Copia il client
+COPY client/sensor_client.py .
+
+# Comando di avvio
+CMD ["python", "sensor_client.py", \
+     "--server", "${SERVER_URL}", \
+     "--client-id", "${CLIENT_ID}", \
+     "--data-folder", "${DATA_FOLDER}", \
+     "--speed", "${SPEED_MULTIPLIER:-1}"]

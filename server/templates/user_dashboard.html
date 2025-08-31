@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<h2>Benvenuto, {{ current_user.username }}</h2>
+
+{% for sensor, data in chart_data[current_user.username].items() %}
+<h3>{{ sensor }}</h3>
+<canvas id="{{ sensor }}"></canvas>
+<script>
+const ctx = document.getElementById("{{ sensor }}").getContext("2d");
+const sensorData = {{ chart_data|safe }}['{{ current_user.username }}']['{{ sensor }}'];
+new Chart(ctx, {
+    type:'line',
+    data:{
+        labels:sensorData.timestamps,
+        datasets:[
+            {label:'Valori', data:sensorData.values, borderColor:'blue', fill:false},
+            {label:'Media mobile', data:sensorData.moving_average, borderColor:'green', fill:false},
+            {label:'Anomalie', data:sensorData.anomalies, borderColor:'red', fill:false, pointRadius:5}
+        ]
+    }
+});
+</script>
+{% endfor %}
+
+</body>
+</html>
