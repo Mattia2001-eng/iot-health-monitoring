@@ -1,0 +1,236 @@
+nohup: ignoring input
+ * Serving Flask app 'app'
+ * Debug mode: on
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.19.0.36:5000
+Press CTRL+C to quit
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 133-328-273
+127.0.0.1 - - [31/Aug/2025 19:52:51] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:52:52] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:52:53] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:52:54] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:52:55] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:52:56] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:52:57] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:52:58] "GET / HTTP/1.1" 302 -
+127.0.0.1 - - [31/Aug/2025 19:52:58] "POST /api/data HTTP/1.1" 404 -
+C:\Users\avell\iot-healt-monitoring\iot-health-monitoring\server\app.py:44: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  return User.query.get(int(user_id))
+127.0.0.1 - - [31/Aug/2025 19:52:58] "GET /login HTTP/1.1" 200 -
+127.0.0.1 - - [31/Aug/2025 19:52:59] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:53:00] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:53:01] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:53:02] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:53:03] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:53:04] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:53:05] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:53:06] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:53:07] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:53:08] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:53:09] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:53:10] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:53:11] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:53:12] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:53:13] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:53:14] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:53:15] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:53:16] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:53:17] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:53:18] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:53:19] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:53:20] "POST /login HTTP/1.1" 302 -
+127.0.0.1 - - [31/Aug/2025 19:53:20] "GET /admin HTTP/1.1" 500 -
+Traceback (most recent call last):
+  File "C:\Users\avell\iot-healt-monitoring\iot-health-monitoring\venv\lib\site-packages\flask\app.py", line 2552, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "C:\Users\avell\iot-healt-monitoring\iot-health-monitoring\venv\lib\site-packages\flask\app.py", line 2532, in wsgi_app
+    response = self.handle_exception(e)
+  File "C:\Users\avell\iot-healt-monitoring\iot-health-monitoring\venv\lib\site-packages\flask\app.py", line 2529, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\avell\iot-healt-monitoring\iot-health-monitoring\venv\lib\site-packages\flask\app.py", line 1825, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\avell\iot-healt-monitoring\iot-health-monitoring\venv\lib\site-packages\flask\app.py", line 1823, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\avell\iot-healt-monitoring\iot-health-monitoring\venv\lib\site-packages\flask\app.py", line 1799, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+  File "C:\Users\avell\iot-healt-monitoring\iot-health-monitoring\venv\lib\site-packages\flask_login\utils.py", line 290, in decorated_view
+    return current_app.ensure_sync(func)(*args, **kwargs)
+  File "C:\Users\avell\iot-healt-monitoring\iot-health-monitoring\server\app.py", line 87, in admin_dashboard
+    chart_data = prepare_chart_data()
+  File "C:\Users\avell\iot-healt-monitoring\iot-health-monitoring\server\app.py", line 159, in prepare_chart_data
+    for stype,_ in sensor_types:
+ValueError: not enough values to unpack (expected 2, got 1)
+127.0.0.1 - - [31/Aug/2025 19:53:20] "GET /admin?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 304 -
+127.0.0.1 - - [31/Aug/2025 19:53:20] "GET /admin?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 304 -
+127.0.0.1 - - [31/Aug/2025 19:53:20] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:53:20] "GET /admin?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 304 -
+127.0.0.1 - - [31/Aug/2025 19:53:21] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:53:22] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:53:23] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:53:24] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:53:25] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:53:26] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:53:28] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:53:29] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:53:30] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:53:31] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:53:32] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:53:33] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:53:34] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:53:35] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:53:36] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:53:37] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:53:38] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:53:39] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:53:40] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:53:41] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:53:42] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:53:43] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:53:44] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:53:45] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:53:46] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:53:47] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:53:48] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:53:49] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:53:50] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:53:51] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:53:52] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:53:53] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:53:54] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:53:55] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:53:56] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:53:57] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:53:58] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:53:59] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:54:00] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:54:01] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:54:02] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:54:03] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:54:04] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:54:05] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:54:06] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:54:07] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:54:08] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:54:09] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:54:10] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:54:11] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:54:12] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:54:13] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:54:14] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:55:40] "GET / HTTP/1.1" 302 -
+127.0.0.1 - - [31/Aug/2025 19:55:41] "GET /login HTTP/1.1" 200 -
+127.0.0.1 - - [31/Aug/2025 19:56:10] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:56:11] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:56:12] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:56:13] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:56:14] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:56:15] "GET /login HTTP/1.1" 200 -
+127.0.0.1 - - [31/Aug/2025 19:56:15] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:56:16] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:56:17] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:56:18] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:56:19] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:56:20] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:56:21] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:56:22] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:56:23] "POST /login HTTP/1.1" 302 -
+127.0.0.1 - - [31/Aug/2025 19:56:23] "GET /admin HTTP/1.1" 500 -
+Traceback (most recent call last):
+  File "C:\Users\avell\iot-healt-monitoring\iot-health-monitoring\venv\lib\site-packages\flask\app.py", line 2552, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "C:\Users\avell\iot-healt-monitoring\iot-health-monitoring\venv\lib\site-packages\flask\app.py", line 2532, in wsgi_app
+    response = self.handle_exception(e)
+  File "C:\Users\avell\iot-healt-monitoring\iot-health-monitoring\venv\lib\site-packages\flask\app.py", line 2529, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\avell\iot-healt-monitoring\iot-health-monitoring\venv\lib\site-packages\flask\app.py", line 1825, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\avell\iot-healt-monitoring\iot-health-monitoring\venv\lib\site-packages\flask\app.py", line 1823, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\avell\iot-healt-monitoring\iot-health-monitoring\venv\lib\site-packages\flask\app.py", line 1799, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+  File "C:\Users\avell\iot-healt-monitoring\iot-health-monitoring\venv\lib\site-packages\flask_login\utils.py", line 290, in decorated_view
+    return current_app.ensure_sync(func)(*args, **kwargs)
+  File "C:\Users\avell\iot-healt-monitoring\iot-health-monitoring\server\app.py", line 87, in admin_dashboard
+    chart_data = prepare_chart_data()
+  File "C:\Users\avell\iot-healt-monitoring\iot-health-monitoring\server\app.py", line 159, in prepare_chart_data
+    for stype,_ in sensor_types:
+ValueError: not enough values to unpack (expected 2, got 1)
+127.0.0.1 - - [31/Aug/2025 19:56:23] "GET /admin?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 304 -
+127.0.0.1 - - [31/Aug/2025 19:56:23] "GET /admin?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 304 -
+127.0.0.1 - - [31/Aug/2025 19:56:23] "GET /admin?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 304 -
+127.0.0.1 - - [31/Aug/2025 19:56:23] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:56:25] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:56:26] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:56:27] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:56:28] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:56:29] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:56:30] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:56:31] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:56:32] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:56:33] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:56:34] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:56:35] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:56:36] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:56:37] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:56:38] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:56:39] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:56:40] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:56:41] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:56:42] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:56:43] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:56:44] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:56:45] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:56:46] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:56:47] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:56:48] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:56:49] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:56:50] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:56:51] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:56:52] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:56:53] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:56:54] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:56:55] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:56:56] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:56:57] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:56:58] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:56:59] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:57:00] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:57:01] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:57:02] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:57:03] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:57:04] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:57:05] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:57:06] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:57:07] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:57:08] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:57:09] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:57:10] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:57:11] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:57:12] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:57:13] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:57:14] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:57:15] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:57:16] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:57:17] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:57:18] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:57:19] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:57:20] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:57:21] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:57:22] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:57:23] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:57:24] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:57:25] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:57:26] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:57:27] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:57:28] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:57:30] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:57:31] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:57:32] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:57:33] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:57:34] "POST /api/data HTTP/1.1" 404 -
+127.0.0.1 - - [31/Aug/2025 19:57:35] "POST /api/data HTTP/1.1" 404 -
+ * Detected change in 'C:\\Users\\avell\\iot-healt-monitoring\\iot-health-monitoring\\server\\app.py', reloading

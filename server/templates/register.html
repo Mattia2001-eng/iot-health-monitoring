@@ -1,42 +1,38 @@
 <!DOCTYPE html>
-<html>
+<html lang="it">
 <head>
-  <title>Crea Nuovo Utente</title>
+    <meta charset="UTF-8">
+    <title>Crea Utente</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-<h2>Crea Nuovo Utente</h2>
+    <h2>Crea Nuovo Utente</h2>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <ul>
+          {% for category, message in messages %}
+            <li class="{{ category }}">{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
 
-<form method="POST" action="{{ url_for('create_user') }}">
-  <label>Username:</label><br>
-  <input type="text" name="username" required><br><br>
+    <form method="POST">
+        <label>Username:</label>
+        <input type="text" name="username" required placeholder="Username">
 
-  <label>Email:</label><br>
-  <input type="email" name="email" required><br><br>
+        <label>Email:</label>
+        <input type="email" name="email" required placeholder="Email">
 
-  <label>Password:</label><br>
-  <input type="password" name="password" required><br><br>
+        <label>Password:</label>
+        <input type="password" name="password" required placeholder="Password">
 
-  <label>Ruolo:</label><br>
-  <input type="checkbox" name="is_admin"> Amministratore<br><br>
+        <label>Admin:</label>
+        <input type="checkbox" name="is_admin">
 
-  <button type="submit">Crea Utente</button>
-</form>
+        <button type="submit">Crea Utente</button>
+    </form>
 
-<br>
-<a href="{{ url_for('admin_dashboard') }}">Torna alla Dashboard Admin</a>
-
-<!-- Messaggi Flash -->
-{% with messages = get_flashed_messages(with_categories=true) %}
-  {% if messages %}
-    <ul>
-    {% for category, message in messages %}
-      <li style="color: {% if category=='danger' %}red{% elif category=='success' %}green{% else %}black{% endif %};">
-        {{ message }}
-      </li>
-    {% endfor %}
-    </ul>
-  {% endif %}
-{% endwith %}
-
+    <a href="{{ url_for('admin_dashboard') }}">Torna alla dashboard</a>
 </body>
 </html>

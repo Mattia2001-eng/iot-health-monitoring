@@ -6,8 +6,11 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 
+# ================== CONFIGURAZIONE ==================
 app = Flask(__name__)
 app.secret_key = "supersecretkey"
+
+# Database SQLite
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///health_monitoring.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
@@ -16,7 +19,7 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login"
 
-# ===== MODELLI DB =====
+# ================== MODELLI DB ==================
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), unique=True, nullable=False)
@@ -32,6 +35,7 @@ class User(UserMixin, db.Model):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
+
 class SensorData(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
@@ -39,26 +43,34 @@ class SensorData(db.Model):
     value = db.Column(db.Float)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
 
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-# ===== LOGIN =====
+# ================== LOGIN ==================
 @app.route("/")
 def index():
     return redirect(url_for("login"))
 
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
-        username = request.form["username"]
-        password = request.form["password"]
+        username = request.form.get("username", "").strip()
+        password = request.form.get("password", "")
         user = User.query.filter_by(username=username).first()
         if user and user.check_password(password):
             login_user(user)
-            return redirect(url_for("admin_dashboard" if user.is_admin else "user_dashboard"))
-        flash("Credenziali non valide", "warning")
+            if user.is_admin:
+                return redirect(url_for("admin_dashboard"))
+            else:
+                return redirect(url_for("user_dashboard"))
+        else:
+            flash("Credenziali non valide", "warning")
+            return redirect(url_for("login"))
     return render_template("login.html")
+
 
 @app.route("/logout")
 @login_required
@@ -66,16 +78,25 @@ def logout():
     logout_user()
     return redirect(url_for("login"))
 
-# ===== DASHBOARD =====
+# ================== DASHBOARD ==================
 @app.route("/dashboard")
 @login_required
 def user_dashboard():
     if current_user.is_admin:
         return redirect(url_for("admin_dashboard"))
 
+    stats_week = calculate_stats(days=7, user=current_user)
     chart_data = prepare_chart_data(user=current_user)
     anomalies = get_recent_anomalies(user=current_user)
-    return render_template("user_dashboard.html", chart_data=json.dumps(chart_data), anomalies=anomalies, current_user=current_user)
+
+    return render_template(
+        "user_dashboard.html",
+        stats_week=stats_week,
+        chart_data=json.dumps(chart_data),
+        anomalies=anomalies,
+        current_user=current_user
+    )
+
 
 @app.route("/admin")
 @login_required
@@ -84,103 +105,153 @@ def admin_dashboard():
         flash("Accesso negato", "danger")
         return redirect(url_for("user_dashboard"))
 
+    stats_week = calculate_stats(days=7)
     chart_data = prepare_chart_data()
     anomalies = get_recent_anomalies()
     users = User.query.all()
-    return render_template("admin_dashboard.html", chart_data=json.dumps(chart_data), anomalies=anomalies, users=users, current_user=current_user)
 
-# ===== CREAZIONE UTENTI =====
-@app.route("/admin/create_user", methods=["GET","POST"])
+    return render_template(
+        "admin_dashboard.html",
+        stats_week=stats_week,
+        chart_data=json.dumps(chart_data),
+        anomalies=anomalies,
+        users=users,
+        current_user=current_user
+    )
+
+# ================== CREAZIONE UTENTI ==================
+@app.route("/admin/create_user", methods=["GET", "POST"])
 @login_required
 def create_user():
     if not current_user.is_admin:
+        flash("Accesso negato", "danger")
         return redirect(url_for("user_dashboard"))
 
-    if request.method=="POST":
-        username = request.form["username"].strip()
-        email = request.form["email"].strip()
-        password = request.form["password"]
+    if request.method == "POST":
+        username = request.form.get("username", "").strip()
+        email = request.form.get("email", "").strip().lower()
+        password = request.form.get("password", "")
         is_admin = "is_admin" in request.form
-        if User.query.filter_by(username=username).first() or User.query.filter_by(email=email).first():
-            flash("Username o email già esistenti", "danger")
+
+        if not username or not email or not password:
+            flash("Tutti i campi sono obbligatori!", "danger")
             return redirect(url_for("create_user"))
-        new_user = User(username=username,email=email,is_admin=is_admin)
-        new_user.set_password(password)
-        db.session.add(new_user)
-        db.session.commit()
-        flash(f"Utente {username} creato!", "success")
-        return redirect(url_for("admin_dashboard"))
+
+        if User.query.filter_by(username=username).first():
+            flash(f"Username '{username}' già esistente!", "danger")
+            return redirect(url_for("create_user"))
+
+        if User.query.filter_by(email=email).first():
+            flash(f"Email '{email}' già registrata!", "danger")
+            return redirect(url_for("create_user"))
+
+        try:
+            new_user = User(username=username, email=email, is_admin=is_admin)
+            new_user.set_password(password)
+            db.session.add(new_user)
+            db.session.commit()
+            flash(f"Utente '{username}' creato con successo!", "success")
+            return redirect(url_for("admin_dashboard"))
+        except Exception as e:
+            db.session.rollback()
+            flash(f"Errore durante la creazione: {str(e)}", "danger")
+            return redirect(url_for("create_user"))
+
     return render_template("register.html", current_user=current_user)
 
-@app.route("/admin/delete_user/<int:user_id>")
-@login_required
-def delete_user(user_id):
-    if not current_user.is_admin:
-        return redirect(url_for("user_dashboard"))
-    user = User.query.get(user_id)
-    if user:
-        SensorData.query.filter_by(user_id=user.id).delete()
-        db.session.delete(user)
-        db.session.commit()
-        flash(f"Utente {user.username} eliminato", "success")
-    return redirect(url_for("admin_dashboard"))
-
-# ===== API SENSORI =====
+# ================== API SENSORI ==================
 @app.route("/api/data", methods=["POST"])
 def receive_data():
     data = request.get_json()
+    if not data:
+        return {"error": "No data provided"}, 400
+
     username = data.get("username")
     sensor_type = data.get("sensor_type")
     value = data.get("value")
+
     if not username or not sensor_type or value is None:
-        return {"error":"Invalid data"},400
+        return {"error": "Invalid data"}, 400
+
     user = User.query.filter_by(username=username).first()
     if not user:
-        return {"error":"User not found"},404
-    db.session.add(SensorData(user_id=user.id,sensor_type=sensor_type,value=float(value)))
+        return {"error": f"User '{username}' not found"}, 404
+
+    sensor_entry = SensorData(user_id=user.id, sensor_type=sensor_type, value=float(value))
+    db.session.add(sensor_entry)
     db.session.commit()
-    return {"status":"success"},200
 
-# ===== FUNZIONI DI SUPPORTO =====
-def moving_average(values, window_size=5):
-    if len(values)<window_size: return [sum(values)/len(values)]*len(values)
-    ma=[]
-    for i in range(len(values)):
-        window=values[max(0,i-window_size+1):i+1]
-        ma.append(sum(window)/len(window))
-    return ma
+    return {"status": "success"}, 200
 
-def prepare_chart_data(user=None, window_size=5, threshold=100):
-    chart_data={}
-    users=[user] if user else User.query.all()
+# ================== FUNZIONI DI SUPPORTO ==================
+def calculate_stats(days=7, user=None):
+    stats = {}
+    since = datetime.utcnow() - timedelta(days=days)
+
+    if user:
+        users = [user]
+    else:
+        users = User.query.all()
+
     for u in users:
-        chart_data[u.username]={}
-        sensor_types=db.session.query(SensorData.sensor_type).filter_by(user_id=u.id).distinct()
-        for stype,_ in sensor_types:
-            entries=SensorData.query.filter_by(user_id=u.id,sensor_type=stype).order_by(SensorData.timestamp).all()
-            values=[e.value for e in entries]
-            timestamps=[e.timestamp.strftime("%H:%M:%S") for e in entries]
-            chart_data[u.username][stype]={
-                "timestamps":timestamps,
-                "values":values,
-                "moving_average":moving_average(values,window_size),
-                "anomalies":[v if v>threshold else None for v in values]
+        stats[u.username] = {}
+        sensor_types = db.session.query(SensorData.sensor_type).filter(
+            SensorData.user_id == u.id, SensorData.timestamp >= since
+        ).distinct()
+        for stype_tuple in sensor_types:
+            stype = stype_tuple[0]
+            values = [d.value for d in SensorData.query.filter_by(user_id=u.id, sensor_type=stype).all()]
+            if values:
+                stats[u.username][stype] = {
+                    "mean": sum(values) / len(values),
+                    "min": min(values),
+                    "max": max(values),
+                    "count": len(values)
+                }
+    return stats
+
+
+def prepare_chart_data(user=None):
+    chart_data = {}
+    if user:
+        users = [user]
+    else:
+        users = User.query.all()
+
+    for u in users:
+        chart_data[u.username] = {}
+        sensor_types = db.session.query(SensorData.sensor_type).filter_by(user_id=u.id).distinct()
+        for stype_tuple in sensor_types:
+            stype = stype_tuple[0]
+            entries = SensorData.query.filter_by(user_id=u.id, sensor_type=stype).order_by(SensorData.timestamp).all()
+            chart_data[u.username][stype] = {
+                "timestamps": [e.timestamp.strftime("%H:%M:%S") for e in entries],
+                "values": [e.value for e in entries]
             }
     return chart_data
 
-def get_recent_anomalies(limit=10, user=None, threshold=100):
-    query=SensorData.query
-    if user: query=query.filter(SensorData.user_id==user.id)
-    anomalies=query.filter(SensorData.value>threshold).order_by(SensorData.timestamp.desc()).limit(limit).all()
+
+def get_recent_anomalies(limit=10, user=None):
+    if user:
+        anomalies = SensorData.query.filter(
+            SensorData.user_id == user.id,
+            SensorData.value > 100
+        ).order_by(SensorData.timestamp.desc()).limit(limit).all()
+    else:
+        anomalies = SensorData.query.filter(
+            SensorData.value > 100
+        ).order_by(SensorData.timestamp.desc()).limit(limit).all()
     return anomalies
 
-# ===== RUN SERVER =====
-if __name__=="__main__":
+# ================== RUN SERVER ==================
+if __name__ == "__main__":
     with app.app_context():
         db.create_all()
         if not User.query.filter_by(username="admin").first():
-            admin_user=User(username="admin",email="admin@example.com",is_admin=True)
+            admin_user = User(username="admin", email="admin@example.com", is_admin=True)
             admin_user.set_password("admin123")
             db.session.add(admin_user)
             db.session.commit()
+            print("✅ Admin creato: username='admin', password='admin123'")
+
     app.run(host="0.0.0.0", port=5000, debug=True)
